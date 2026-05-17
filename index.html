@@ -1075,6 +1075,29 @@ body::before{
   width: 100%;
 }
 
+/* once a real image is dropped in, hide the decorative placeholder pattern */
+.img-slot.has-image::before{ display:none; }
+.img-slot.has-image{ background: var(--ink); }
+
+/* link wrapper around a case image */
+.case-img-link{
+  display:block;
+  text-decoration:none;
+  color:inherit;
+}
+.case-img-link .img-slot{
+  transition: transform .5s cubic-bezier(.2,.8,.2,1);
+}
+.case-img-link:hover .img-slot{
+  transform: translate(-2px,-2px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.case-img-link:hover .label{
+  background:var(--accent);
+  color:var(--paper);
+  border-color:var(--accent);
+}
+
 /* big Wuf Labs banner mark */
 .wuf-banner{
   margin: 0 0 28px;
@@ -1805,12 +1828,13 @@ body::before{
       <h3>RidgecrestGuide.com &mdash; the town's <em>operating system</em>.</h3>
       <p>AI-curated events, automated jobs, daily social. One person, one stack.</p>
 
-      <!-- TODO: drop in a screenshot or hero image of RidgecrestGuide.com (16:9) -->
-      <figure class="img-slot case-img" aria-label="RidgecrestGuide.com screenshot">
-        <span class="corner">RG · LIVE</span>
-        <span class="label">RidgecrestGuide.com — screenshot</span>
-        <!-- <img src="/cases/ridgecrestguide.jpg" alt="RidgecrestGuide.com homepage"> -->
-      </figure>
+      <a href="https://ridgecrestguide.com" target="_blank" rel="noopener" class="case-img-link" aria-label="Open RidgecrestGuide.com in a new tab">
+        <figure class="img-slot case-img has-image" aria-label="RidgecrestGuide.com — homepage">
+          <img src="/images/cases/ridgecrest-guide.jpg" alt="RidgecrestGuide.com homepage — Your Guide to Ridgecrest, CA" loading="lazy" decoding="async">
+          <span class="corner">RG · LIVE</span>
+          <span class="label">ridgecrestguide.com →</span>
+        </figure>
+      </a>
 
       <div class="stats">
         <div class="stat"><b>17K+</b><span>visitors /yr</span></div>
