@@ -2023,15 +2023,10 @@ body::before{
 
     <!--
       CONTACT FORM
-      Powered by Web3Forms — unlimited free tier, sends submissions straight to your inbox.
-      TODO: replace WEB3FORMS_ACCESS_KEY below with the key from https://web3forms.com/
-      Setup: enter Hello@zawolfe.com → confirm the activation email → copy the access key → paste it here.
+      Posts JSON to /api/contact (Vercel serverless function) which sends via Resend.
+      RESEND_API_KEY is set as a Vercel environment variable — never in source.
     -->
-    <form id="contactForm" class="contact-form reveal" action="https://api.web3forms.com/submit" method="POST" novalidate>
-      <input type="hidden" name="access_key" value="WEB3FORMS_ACCESS_KEY">
-      <input type="hidden" name="subject" value="New inquiry — zawolfe.com">
-      <input type="hidden" name="from_name" value="zawolfe.com">
-      <input type="hidden" name="redirect" value="false">
+    <form id="contactForm" class="contact-form reveal" action="/api/contact" method="POST" novalidate>
       <input type="checkbox" name="botcheck" class="honey" tabindex="-1" autocomplete="off">
 
       <div class="ff">
@@ -2268,7 +2263,7 @@ body::before{
   Object.values(els).forEach(el => el && el.addEventListener('input', calc));
   calc();
 
-  /* ---- contact form (Web3Forms) ---- */
+  /* ---- contact form (Resend via /api/contact) ---- */
   const cf = document.getElementById('contactForm');
   if (cf){
     const ok = document.getElementById('formOk');
@@ -2277,24 +2272,18 @@ body::before{
     cf.addEventListener('submit', async (e) => {
       e.preventDefault();
       ok.classList.remove('show'); err.classList.remove('show');
-      const key = cf.querySelector('input[name="access_key"]').value;
-      if (!key || key === 'WEB3FORMS_ACCESS_KEY'){
-        err.textContent = 'Form not yet configured. Email Hello@zawolfe.com instead.';
-        err.classList.add('show');
-        return;
-      }
       btn.disabled = true;
       const original = btn.textContent;
       btn.textContent = 'Sending…';
       try{
-        const data = new FormData(cf);
+        const payload = Object.fromEntries(new FormData(cf).entries());
         const res = await fetch(cf.action, {
           method:'POST',
-          body: data,
-          headers:{ 'Accept':'application/json' }
+          headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+          body: JSON.stringify(payload),
         });
         const json = await res.json().catch(() => ({}));
-        if (res.ok && (json.success === true || json.success === undefined)){
+        if (res.ok && json.success === true){
           ok.classList.add('show');
           cf.reset();
         } else {

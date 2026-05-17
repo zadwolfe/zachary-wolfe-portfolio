@@ -1,0 +1,10 @@
+{
+  "name": "zachary-wolfe-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Personal portfolio + Wuf Labs studio — Zach Wolfe, Ridgecrest, CA",
+  "dependencies": {
+    "resend": "^4.0.1"
+  }
+}
