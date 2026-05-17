@@ -2,16 +2,10 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Notification recipient. Resend's shared sandbox sender (onboarding@resend.dev) can only
-// deliver to the email registered on your Resend account, so we route to that Gmail.
-//
-// AFTER verifying zawolfe.com in Resend (Dashboard → Domains → Add Domain → add the DNS
-// records to your registrar), flip both lines to:
-//   const TO_ADDRESS   = 'Hello@zawolfe.com';
-//   const FROM_ADDRESS = 'Wuf Labs <forms@zawolfe.com>';
-// then `git push` — Vercel auto-deploys.
-const TO_ADDRESS = 'kidwolfedesign@gmail.com';
-const FROM_ADDRESS = 'Wuf Labs <onboarding@resend.dev>';
+// zawolfe.com is verified in Resend, so we send from the branded sender on our own domain
+// (better deliverability + brand consistency) and notifications land at Hello@zawolfe.com.
+const TO_ADDRESS = 'Hello@zawolfe.com';
+const FROM_ADDRESS = 'Wuf Labs <forms@zawolfe.com>';
 
 const esc = (s = '') =>
   String(s).replace(/[<>&"']/g, (c) => ({
