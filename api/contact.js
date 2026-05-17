@@ -3,8 +3,11 @@ import { Resend } from 'resend';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // zawolfe.com is verified in Resend, so we send from the branded sender on our own domain
-// (better deliverability + brand consistency) and notifications land at Hello@zawolfe.com.
+// (better deliverability + brand consistency).
+// Primary inbox is the branded address; Gmail receives a guaranteed BCC copy so nothing
+// is ever missed if the Proofpoint mailbox at the apex changes / forwards / quarantines.
 const TO_ADDRESS = 'Hello@zawolfe.com';
+const BCC_ADDRESS = 'kidwolfedesign@gmail.com';
 const FROM_ADDRESS = 'Wuf Labs <forms@zawolfe.com>';
 
 const esc = (s = '') =>
@@ -80,6 +83,7 @@ Reply directly to this email to respond.`;
     const { data, error } = await resend.emails.send({
       from: FROM_ADDRESS,
       to: [TO_ADDRESS],
+      bcc: [BCC_ADDRESS],
       replyTo: email,
       subject,
       html,
