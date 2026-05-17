@@ -91,11 +91,13 @@ Reply directly to this email to respond.`;
 
     if (error) {
       console.error('Resend send error:', error);
-      return res.status(502).json({ success: false, message: 'Could not send email' });
+      const detail = error?.message || error?.name || 'Could not send email';
+      return res.status(502).json({ success: false, message: `Resend: ${detail}` });
     }
     return res.status(200).json({ success: true, id: data?.id });
   } catch (err) {
     console.error('Contact handler error:', err);
-    return res.status(500).json({ success: false, message: 'Server error' });
+    const detail = err?.message || 'Server error';
+    return res.status(500).json({ success: false, message: `Server: ${detail}` });
   }
 }
