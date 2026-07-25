@@ -1,0 +1,5 @@
+{
+  "redirects": [
+    { "source": "/Victory", "destination": "/victory", "permanent": false }
+  ]
+}
